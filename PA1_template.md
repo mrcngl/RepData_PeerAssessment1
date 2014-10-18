@@ -137,9 +137,151 @@ interval_max
 
 
 
+## Imputing missing values
+
+1. Calculate and report the total number of missing values in the dataset.
+2. Devise a strategy for filling in all of the missing values in the dataset.
+3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
+4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. 
 
 
+Calculate the total of NA values in the original dataset
+
+```r
+total_NA <- sum(is.na(activitydata))
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'activitydata' not found
+```
+
+```r
+total_NA 
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'total_NA' not found
+```
+
+Filling in all of the missing values with the **average interval value across all days**
+
+```r
+na_index <-  which(is.na(activitydata))
+```
+
+```
+## Error in which(is.na(activitydata)): object 'activitydata' not found
+```
+
+```r
+activity_imputed <- meansteps[as.character(activitydata[na_index,3])]
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'meansteps' not found
+```
+
+```r
+names(activity_imputed) <- na_index
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'na_index' not found
+```
+
+```r
+for (i in na_index) {
+    activitydata$steps[i] = activity_imputed[as.character(i)]
+}
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'na_index' not found
+```
+
+```r
+sum(is.na(activitydata)) 
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'activitydata' not found
+```
+
+```r
+totalsteps <- tapply(activitydata$steps, activitydata$date,sum)
+```
+
+```
+## Error in tapply(activitydata$steps, activitydata$date, sum): object 'activitydata' not found
+```
+
+```r
+hist(totalsteps,col="red",xlab="Total Steps per Day", 
+      ylab="Frequency", main="Histogram of Total Steps taken per day")
+```
+
+```
+## Error in hist(totalsteps, col = "red", xlab = "Total Steps per Day", ylab = "Frequency", : object 'totalsteps' not found
+```
 
 
+## Are there differences in activity patterns between weekdays and weekends?
+1. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
+2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
 
+```r
+days <- weekdays(activitydata$date)
+```
+
+```
+## Error in weekdays(activitydata$date): object 'activitydata' not found
+```
+
+```r
+activitydata$day_type <- ifelse(days == "Saturday" | days == "Sunday", 
+                                "Weekend", "Weekday")
+```
+
+```
+## Error in ifelse(days == "Saturday" | days == "Sunday", "Weekend", "Weekday"): object 'days' not found
+```
+
+```r
+meansteps <- aggregate(activitydata$steps,
+                                    by=list(activitydata$interval,
+                                            activitydata$day_type),mean)
+```
+
+```
+## Error in aggregate(activitydata$steps, by = list(activitydata$interval, : object 'activitydata' not found
+```
+
+```r
+names(meansteps) <- c("interval","day_type","steps")
+```
+
+```
+## Error in names(meansteps) <- c("interval", "day_type", "steps"): object 'meansteps' not found
+```
+
+```r
+xyplot(steps~interval | day_type, meansteps,type="l",
+       layout=c(1,2),xlab="Interval",ylab = "Number of steps")
+```
+
+```
+## Error in eval(substitute(groups), data, environment(x)): object 'meansteps' not found
+```
+Computing the mean, median, max and min of the steps across all intervals and Weekdays/Weekends
+
+```r
+tapply(meansteps$steps,meansteps$day_type,
+       function (x) { c(MINIMUM=min(x),MEAN=mean(x),
+                        MEDIAN=median(x),MAXIMUM=max(x))})
+```
+
+```
+## Error in tapply(meansteps$steps, meansteps$day_type, function(x) {: object 'meansteps' not found
+```
+The end!
