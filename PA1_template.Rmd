@@ -115,9 +115,10 @@ names(meansteps) <- c("interval","day_type","steps")
 xyplot(steps~interval | day_type, meansteps,type="l",
        layout=c(1,2),xlab="Interval",ylab = "Number of steps")
 ```
-Let's compute the mean, median, max and min of the steps across all intervals and days by Weekdays/Weekends
+Computing the mean, median, max and min of the steps across all intervals and Weekdays/Weekends
 ```{r}
 tapply(meansteps$steps,meansteps$day_type,
        function (x) { c(MINIMUM=min(x),MEAN=mean(x),
                         MEDIAN=median(x),MAXIMUM=max(x))})
 ```
+The end!
