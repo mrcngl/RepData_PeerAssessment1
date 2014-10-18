@@ -17,24 +17,8 @@ library(lattice)
 Loading Activity csv data **activity.csv** and date conversion to **R Date class**  
 
 ```r
-activitydata <- read.csv("activity.csv")
-```
-
-```
-## Warning in file(file, "rt"): cannot open file 'activity.csv': No such file
-## or directory
-```
-
-```
-## Error in file(file, "rt"): cannot open the connection
-```
-
-```r
+activitydata <- read.csv(unzip("activity.zip"))
 activitydata$date <- as.Date(activitydata$date,"%Y-%m-%d")
-```
-
-```
-## Error in as.Date(activitydata$date, "%Y-%m-%d"): object 'activitydata' not found
 ```
 
 ## What is mean total number of steps taken per day?
@@ -47,20 +31,14 @@ Total number of steps per day
 ```r
 totalsteps <- tapply(activitydata$steps, activitydata$date,sum)
 ```
-
-```
-## Error in tapply(activitydata$steps, activitydata$date, sum): object 'activitydata' not found
-```
 Plot histogram of **total number of steps/day**
 
 ```r
-hist(totalsteps,col="blue",xlab="Total Steps per Day", 
+hist(totalsteps,col="red",xlab="Total Steps per Day", 
       ylab="Frequency", main="Histogram of Total Steps/Day")
 ```
 
-```
-## Error in hist(totalsteps, col = "blue", xlab = "Total Steps per Day", : object 'totalsteps' not found
-```
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
 Calculate Mean total **steps/day**
 
 ```r
@@ -68,7 +46,7 @@ mean(totalsteps,na.rm=TRUE)
 ```
 
 ```
-## Error in mean(totalsteps, na.rm = TRUE): object 'totalsteps' not found
+## [1] 10766.19
 ```
 
 Calculate Median total **steps/day**
@@ -78,7 +56,7 @@ median(totalsteps,na.rm=TRUE)
 ```
 
 ```
-## Error in median(totalsteps, na.rm = TRUE): object 'totalsteps' not found
+## [1] 10765
 ```
 
 ## What is the average daily activity pattern?
@@ -92,10 +70,6 @@ Calculate Mean of steps across all days by time interval
 meansteps <- tapply(activitydata$steps,activitydata$interval,
                                  mean,na.rm=TRUE)
 ```
-
-```
-## Error in tapply(activitydata$steps, activitydata$interval, mean, na.rm = TRUE): object 'activitydata' not found
-```
 Time series plot
 
 ```r
@@ -103,36 +77,20 @@ plot(row.names(meansteps),meansteps,type="l",
      xlab="5-minute interval", 
      ylab="Steps taken average", 
      main="Average number of steps Taken at 5 minute Intervals",
-     col="red")
+     col="blue")
 ```
 
-```
-## Error in row.names(meansteps): object 'meansteps' not found
-```
+![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png) 
 Maximum average number of steps across all days by time interval
 
 ```r
 interval_number <- which.max(meansteps)
-```
-
-```
-## Error in which.max(meansteps): object 'meansteps' not found
-```
-
-```r
 interval_max <- names(interval_number)
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'interval_number' not found
-```
-
-```r
 interval_max
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'interval_max' not found
+## [1] "835"
 ```
 
 
@@ -149,80 +107,36 @@ Calculate the total of NA values in the original dataset
 
 ```r
 total_NA <- sum(is.na(activitydata))
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'activitydata' not found
-```
-
-```r
 total_NA 
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'total_NA' not found
+## [1] 2304
 ```
 
 Filling in all of the missing values with the **average interval value across all days**
 
 ```r
 na_index <-  which(is.na(activitydata))
-```
-
-```
-## Error in which(is.na(activitydata)): object 'activitydata' not found
-```
-
-```r
 activity_imputed <- meansteps[as.character(activitydata[na_index,3])]
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'meansteps' not found
-```
-
-```r
 names(activity_imputed) <- na_index
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'na_index' not found
-```
-
-```r
 for (i in na_index) {
     activitydata$steps[i] = activity_imputed[as.character(i)]
 }
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'na_index' not found
-```
-
-```r
 sum(is.na(activitydata)) 
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'activitydata' not found
+## [1] 0
 ```
 
 ```r
 totalsteps <- tapply(activitydata$steps, activitydata$date,sum)
-```
-
-```
-## Error in tapply(activitydata$steps, activitydata$date, sum): object 'activitydata' not found
-```
-
-```r
 hist(totalsteps,col="red",xlab="Total Steps per Day", 
       ylab="Frequency", main="Histogram of Total Steps taken per day")
 ```
 
-```
-## Error in hist(totalsteps, col = "red", xlab = "Total Steps per Day", ylab = "Frequency", : object 'totalsteps' not found
-```
+![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png) 
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
@@ -232,47 +146,17 @@ hist(totalsteps,col="red",xlab="Total Steps per Day",
 
 ```r
 days <- weekdays(activitydata$date)
-```
-
-```
-## Error in weekdays(activitydata$date): object 'activitydata' not found
-```
-
-```r
 activitydata$day_type <- ifelse(days == "Saturday" | days == "Sunday", 
                                 "Weekend", "Weekday")
-```
-
-```
-## Error in ifelse(days == "Saturday" | days == "Sunday", "Weekend", "Weekday"): object 'days' not found
-```
-
-```r
 meansteps <- aggregate(activitydata$steps,
                                     by=list(activitydata$interval,
                                             activitydata$day_type),mean)
-```
-
-```
-## Error in aggregate(activitydata$steps, by = list(activitydata$interval, : object 'activitydata' not found
-```
-
-```r
 names(meansteps) <- c("interval","day_type","steps")
-```
-
-```
-## Error in names(meansteps) <- c("interval", "day_type", "steps"): object 'meansteps' not found
-```
-
-```r
 xyplot(steps~interval | day_type, meansteps,type="l",
        layout=c(1,2),xlab="Interval",ylab = "Number of steps")
 ```
 
-```
-## Error in eval(substitute(groups), data, environment(x)): object 'meansteps' not found
-```
+![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12-1.png) 
 Computing the mean, median, max and min of the steps across all intervals and Weekdays/Weekends
 
 ```r
@@ -282,6 +166,12 @@ tapply(meansteps$steps,meansteps$day_type,
 ```
 
 ```
-## Error in tapply(meansteps$steps, meansteps$day_type, function(x) {: object 'meansteps' not found
+## $Weekday
+##   MINIMUM      MEAN    MEDIAN   MAXIMUM 
+##   0.00000  35.61058  25.80314 230.37820 
+## 
+## $Weekend
+##   MINIMUM      MEAN    MEDIAN   MAXIMUM 
+##   0.00000  42.36640  32.33962 166.63915
 ```
 The end!

@@ -31,7 +31,7 @@ totalsteps <- tapply(activitydata$steps, activitydata$date,sum)
 ```
 Plot histogram of **total number of steps/day**
 ```{r}
-hist(totalsteps,col="blue",xlab="Total Steps per Day", 
+hist(totalsteps,col="red",xlab="Total Steps per Day", 
       ylab="Frequency", main="Histogram of Total Steps/Day")
 ```
 Calculate Mean total **steps/day**
@@ -60,7 +60,7 @@ plot(row.names(meansteps),meansteps,type="l",
      xlab="5-minute interval", 
      ylab="Steps taken average", 
      main="Average number of steps Taken at 5 minute Intervals",
-     col="red")
+     col="blue")
 ```
 Maximum average number of steps across all days by time interval
 ```{r}
