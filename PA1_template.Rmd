@@ -68,7 +68,7 @@ interval_number <- which.max(meansteps)
 interval_max <- names(interval_number)
 interval_max
 ```
-Maximum number of steps on average across all the days: 5-minute interval `r interval_max`
+
 
 
 ## Imputing missing values
