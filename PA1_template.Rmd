@@ -29,15 +29,19 @@ Total number of steps per day
 totalsteps <- tapply(activitydata$steps, activitydata$date,sum)
 
 ```
+
 Plot histogram of **total number of steps/day**
 ```{r}
 hist(totalsteps,col="red",xlab="Total Steps per Day", 
       ylab="Frequency", main="Histogram of Total Steps/Day")
 ```
+
+
 Calculate Mean total **steps/day**
 ```{r}
 mean(totalsteps,na.rm=TRUE)
 ```
+
 
 Calculate Median total **steps/day**
 ```{r}
@@ -54,6 +58,8 @@ Calculate Mean of steps across all days by time interval
 meansteps <- tapply(activitydata$steps,activitydata$interval,
                                  mean,na.rm=TRUE)
 ```
+
+
 Time series plot
 ```{r}
 plot(row.names(meansteps),meansteps,type="l",
@@ -62,6 +68,8 @@ plot(row.names(meansteps),meansteps,type="l",
      main="Average number of steps Taken at 5 minute Intervals",
      col="blue")
 ```
+
+
 Maximum average number of steps across all days by time interval
 ```{r}
 interval_number <- which.max(meansteps)
@@ -115,10 +123,14 @@ names(meansteps) <- c("interval","day_type","steps")
 xyplot(steps~interval | day_type, meansteps,type="l",
        layout=c(1,2),xlab="Interval",ylab = "Number of steps")
 ```
+
+
 Computing the mean, median, max and min of the steps across all intervals and Weekdays/Weekends
 ```{r}
 tapply(meansteps$steps,meansteps$day_type,
        function (x) { c(MINIMUM=min(x),MEAN=mean(x),
                         MEDIAN=median(x),MAXIMUM=max(x))})
 ```
+
+
 The end!
