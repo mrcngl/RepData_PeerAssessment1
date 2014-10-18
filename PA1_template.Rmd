@@ -75,30 +75,29 @@ Maximum number of steps on average across all the days: 5-minute interval * `r  
 
 1. Calculate and report the total number of missing values in the dataset.
 2. Devise a strategy for filling in all of the missing values in the dataset.
-3. Create a new dataset that is equal to the original dataset but with the missing data filled
+3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. 
 
 
-Compute the number of NA values in the activity dataset
+Calculate the total of NA values in the original dataset
 ```{r}
-num_na_values <- sum(is.na(activitydata))
-num_na_values 
+total_NA <- sum(is.na(activitydata))
+total_NA 
 ```
 
-Fill in missing values using the **average interval value across all days**
+Filling in all of the missing values with the **average interval value across all days**
 ```{r}
-na_indices <-  which(is.na(activitydata))
-imputed_values <- meansteps[as.character(activitydata[na_indices,3])]
-names(imputed_values) <- na_indices
-for (i in na_indices) {
-    activitydata$steps[i] = imputed_values[as.character(i)]
+na_index <-  which(is.na(activitydata))
+activity_imputed <- meansteps[as.character(activitydata[na_index,3])]
+names(activity_imputed) <- na_index
+for (i in na_index) {
+    activitydata$steps[i] = activity_imputed[as.character(i)]
 }
 sum(is.na(activitydata)) 
 totalsteps <- tapply(activitydata$steps, activitydata$date,sum)
 hist(totalsteps,col="red",xlab="Total Steps per Day", 
       ylab="Frequency", main="Histogram of Total Steps taken per day")
 ```
-Note: **for min/max/mean and median calculation, please see the section below...**
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
